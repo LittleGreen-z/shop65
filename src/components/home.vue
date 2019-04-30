@@ -1,6 +1,24 @@
 <template>
   <div>
-    home-----
+    <el-container class="container">
+      <el-header>
+        <el-row>
+          <el-col :span="4">
+            <img src="../assets/logo.png" alt="图片加载失败">
+          </el-col>
+          <el-col :span="19" class="middle">
+            <h2>电商后台管理系统</h2>
+          </el-col>
+          <el-col :span="1" class="logout">
+            <a href="#" class="logout">退出</a>
+          </el-col>
+        </el-row>
+      </el-header>
+      <el-container>
+        <el-aside width="200px" class="aside">Aside</el-aside>
+        <el-main class="main">Main</el-main>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
@@ -11,5 +29,16 @@ export default {
 </script>
 
 <style>
-
+.container {
+  background-color: #b3c0d1
+}
+.middle {
+  line-height: 60px;
+  text-align: center;
+  color: #ffffff
+}
+.logout {
+  line-height: 60px;
+  text-decoration: none
+}
 </style>
