@@ -16,7 +16,7 @@
         </el-col>
       </el-row>
       <!-- 表格 -->
-      <el-table :data="list" style="width: 100%">
+      <el-table :data="list" style="width: 100%" height="350px">
         <el-table-column prop="id" label="#" width="80"></el-table-column>
         <el-table-column prop="username" label="姓名" width="120"></el-table-column>
         <el-table-column prop="email" label="邮箱" width="140"></el-table-column>
@@ -24,9 +24,33 @@
         <el-table-column prop="create_time" label="创建日期" width="140">
           <template slot-scope="scope">{{scope.row.create_time | fmtdate}}</template>
         </el-table-column>
-        <el-table-column prop="date" label="用户状态" width="140"></el-table-column>
-        <el-table-column prop="date" label="操作" width="200"></el-table-column>
+        <el-table-column label="用户状态" width="140">
+          <template slot-scope="scope">
+            <el-switch
+            v-model="scope.row.mg_state"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column prop="date" label="操作" width="200">
+          <template slot-scope="scope">
+            <el-button type="primary" icon="el-icon-edit" circle size="mini" plain="true"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle size="mini" plain="true"></el-button>
+            <el-button type="success" icon="el-icon-check" circle size="mini" plain="true"></el-button>
+          </template>
+        </el-table-column>
       </el-table>
+      <el-pagination
+      class="page"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pagenum"
+      :page-sizes="[2, 4, 6, 8]"
+      :page-size="2"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total">
+      </el-pagination>
     </el-card>
   </div>
 </template>
@@ -37,8 +61,9 @@ export default {
     return {
       query: '',
       pagenum: 1,
-      pagesize: 10,
-      list: []
+      pagesize: 2,
+      list: [],
+      total: -1
     }
   },
   created () {
@@ -56,8 +81,17 @@ export default {
       const { data, meta } = res.data
       if (meta.status === 200) {
         this.list = data.users
-        console.log(this.list)
+        this.total = data.total
       }
+    },
+    handleSizeChange(val) {
+      this.pagenum = 1
+      this.pagesize = val
+      this.getListdate()
+    },
+    handleCurrentChange(val) {
+      this.pagenum = val
+      this.getListdate()
     }
   }
 }
@@ -75,5 +109,8 @@ export default {
 }
 .searchInput {
   width: 350px;
+}
+.page {
+  margin-top: 20px
 }
 </style>
