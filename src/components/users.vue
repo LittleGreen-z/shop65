@@ -9,8 +9,8 @@
       </el-breadcrumb>
       <el-row class="seartBox">
         <el-col>
-          <el-input class="searchInput" placeholder="请输入内容" v-model="query">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-input clearable @clear="getAllUser()" class="searchInput" placeholder="请输入内容" v-model="query">
+            <el-button slot="append" icon="el-icon-search" @click="searchUser()"></el-button>
           </el-input>
           <el-button type="success">添加用户</el-button>
         </el-col>
@@ -84,13 +84,20 @@ export default {
         this.total = data.total
       }
     },
-    handleSizeChange(val) {
+    handleSizeChange (val) {
       this.pagenum = 1
       this.pagesize = val
       this.getListdate()
     },
-    handleCurrentChange(val) {
+    handleCurrentChange (val) {
       this.pagenum = val
+      this.getListdate()
+    },
+    searchUser () {
+      this.pagenum = 1
+      this.getListdate()
+    },
+    getAllUser () {
       this.getListdate()
     }
   }
