@@ -21,8 +21,6 @@
             class="el-menu-vertical-demo"
             :unique-opened="true"
             :router="true"
-            @open="handleOpen"
-            @close="handleClose"
           >
           <!-- 导航一 -->
             <el-submenu index="1">
