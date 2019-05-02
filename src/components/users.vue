@@ -12,7 +12,7 @@
           <el-input clearable @clear="getAllUser()" class="searchInput" placeholder="请输入内容" v-model="query">
             <el-button slot="append" icon="el-icon-search" @click="searchUser()"></el-button>
           </el-input>
-          <el-button type="success">添加用户</el-button>
+          <el-button type="success" @click="showDiaAddUser()">添加用户</el-button>
         </el-col>
       </el-row>
       <!-- 表格 -->
@@ -35,9 +35,9 @@
         </el-table-column>
         <el-table-column prop="date" label="操作" width="200">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" circle size="mini" plain="true"></el-button>
-            <el-button type="danger" icon="el-icon-delete" circle size="mini" plain="true"></el-button>
-            <el-button type="success" icon="el-icon-check" circle size="mini" plain="true"></el-button>
+            <el-button type="primary" icon="el-icon-edit" circle size="mini" :plain=true></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle size="mini" :plain=true></el-button>
+            <el-button type="success" icon="el-icon-check" circle size="mini" :plain=true></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -51,6 +51,27 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total">
       </el-pagination>
+      <!-- 添加用户对话框 -->
+      <el-dialog title="添加用户" :visible.sync="dialogFormVisibleAdd">
+        <el-form label-position="left" label-width="80px" :model="formdata">
+          <el-form-item label="用户名">
+            <el-input v-model="formdata.username"></el-input>
+          </el-form-item>
+          <el-form-item label="密码">
+            <el-input v-model="formdata.password"></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱">
+            <el-input v-model="formdata.email"></el-input>
+          </el-form-item>
+          <el-form-item label="电话">
+            <el-input v-model="formdata.mobile"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisibleAdd = false">取 消</el-button>
+          <el-button type="primary" @click="dialogFormVisibleAdd = false">确 定</el-button>
+        </div>
+      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -62,6 +83,13 @@ export default {
       query: '',
       pagenum: 1,
       pagesize: 2,
+      dialogFormVisibleAdd: false,
+      formdata: {
+        username: '',
+        password: '',
+        email: '',
+        mobile: ''
+      },
       list: [],
       total: -1
     }
@@ -99,6 +127,9 @@ export default {
     },
     getAllUser () {
       this.getListdate()
+    },
+    showDiaAddUser () {
+      this.dialogFormVisibleAdd = true
     }
   }
 }
