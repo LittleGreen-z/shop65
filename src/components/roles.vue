@@ -8,17 +8,18 @@
         <template slot-scope="scope">
           <el-row v-for="(item1) in scope.row.children" :key="item1.id" class="level1">
             <el-col :span='4'>
-              <el-tag closable>{{item1.authName}}</el-tag>
+              <el-tag closable @close="deleRights(scope.row,item1)">{{item1.authName}}</el-tag>
               <i class="el-icon-arrow-right"></i>
             </el-col>
             <el-col :span='20'>
               <el-row v-for="(item2) in item1.children" :key="item2.id" class="level2">
                 <el-col :span="4">
-                  <el-tag closable type="success">{{item2.authName}}</el-tag>
+                  <el-tag closable type="success" @close="deleRights(scope.row,item2)">{{item2.authName}}</el-tag>
                   <i class="el-icon-arrow-right"></i>
                 </el-col>
                 <el-col :span="20">
-                  <el-tag closable v-for="(item3) in item2.children" :key="item3.id" class="level3" type="warning">
+                  <el-tag closable v-for="(item3) in item2.children" :key="item3.id" class="level3" type="warning"
+                  @close="deleRights(scope.row,item3)">
                     {{item3.authName}}
                   </el-tag>
                 </el-col>
@@ -78,6 +79,15 @@ export default {
     this.getRoles()
   },
   methods: {
+    // 删除权限
+    async deleRights (role, rights) {
+      const res = await this.$http.delete(`roles/${role.id}/rights/${rights.id}}`)
+      const {meta: {status}, data} = res.data
+      if (status === 200) {
+        this.$message.success('删除成功')
+        role.children = data
+      }
+    },
     showDiaUserRights () {
 
     },
