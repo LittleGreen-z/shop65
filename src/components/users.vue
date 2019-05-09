@@ -181,7 +181,6 @@ export default {
         this.dialogFormVisibleRole = false
         this.getListdate()
       }
-
     },
     async showDiaUserRole (user) {
       this.formdata.username = user.username
