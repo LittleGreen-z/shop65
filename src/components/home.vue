@@ -102,12 +102,7 @@
 <script>
 export default {
   beforeMount () {
-    if (!localStorage.getItem('token')) {
-      this.$router.push({
-        name: 'login'
-      })
-      this.$message.warning('请先登录')
-    }
+
   },
   methods: {
     handleLoginout () {
@@ -139,4 +134,5 @@ export default {
   line-height: 60px;
   text-decoration: none;
 }
+
 </style>
