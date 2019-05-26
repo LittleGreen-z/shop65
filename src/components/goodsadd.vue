@@ -65,14 +65,27 @@
             </el-upload>
           </el-form-item>
         </el-tab-pane>
-        <el-tab-pane name="5" label="商品内容">商品内容---</el-tab-pane>
+        <el-tab-pane name="5" label="商品内容">
+          <el-form-item>
+            <el-button  @click="addGoods()">添加商品</el-button>
+            <quillEditor v-model="form.goods_introduce"></quillEditor>
+          </el-form-item>
+        </el-tab-pane>
       </el-tabs>
     </el-form>
   </el-card>
 </template>
 
 <script>
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
+import { quillEditor } from 'vue-quill-editor'
 export default {
+  components: {
+    quillEditor
+  },
   name: "",
   data() {
     return {
@@ -84,8 +97,8 @@ export default {
         goods_number: "",
         goods_weight: "",
         goods_introduce: "",
-        pics: "",
-        attrs: ""
+        pics: [],
+        attrs: []
       },
       options: [],
       selectedOptions: [],
@@ -106,13 +119,45 @@ export default {
     this.getGoodsCate();
   },
   methods: {
+    async addGoods () {
+      this.form.goods_cat = this.selectedOptions.join(',')
+    //  动态
+     const attr1 = this.arrDy.map(item => {
+       return {attr_id: item.attr_id, attr_value: item.attr_vals}
+      })
+      // 静态
+      const attr2 = this.arrState.map(item => {
+       return {attr_id: item.attr_id, attr_value: item.attr_vals}
+      })
+      this.form.attrs = [...attr1, ...attr2]
+
+      const res = await this.$http.post('goods', this.form)
+      console.log(res)
+      const {
+            meta: {msg, status },
+            data
+          } = res.data;
+          if (status === 201) {
+           this.$message.success(msg)
+           this.$router.push({
+             name: 'goods'
+           })
+          }else {
+            console.log(msg)
+          }
+    },
     handleRemove(file, fileList) {
-      console.log('remove')
-        console.log(file, fileList);
+       const index = this.form.pics.findIndex(item => {
+        return item.pic = file.response.data.tmp_path
+      })
+      this.form.pics.splice(index,1)
+      console.log(this.form.pics)
       },
       handleSuccess(response, file, fileList) {
-        console.log(file, fileList);
-         console.log('success')
+        this.form.pics.push({
+          pic: response.data.tmp_path
+        })
+        console.log(this.form.pics)
       },
     async changeTab() {
       if (this.active === "2" || this.active === "3") {
@@ -180,5 +225,8 @@ export default {
 .form {
   height: 350px;
   overflow: auto;
+}
+.ql-container {
+  min-height: 200px
 }
 </style>
