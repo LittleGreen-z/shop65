@@ -163,6 +163,11 @@ export default {
       if (this.active === "2" || this.active === "3") {
         if (this.selectedOptions.length !== 3) {
           this.$message.error("请选择三级分类");
+          if (this.active === '2') {
+            this.arrDy = []
+          }else {
+            this.arrState = []
+          }
           return;
         }
         // 静态数据
